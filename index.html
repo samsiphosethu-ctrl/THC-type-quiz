@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your THC Type</title>
+<style>
+body {
+  margin: 0;
+  padding: 20px 16px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: transparent;
+}
+ 
+* {
+  box-sizing: border-box;
+}
+ 
+.wrap {
+  max-width: 560px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #dde8e3;
+  padding: 36px 32px 32px;
+}
+ 
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1B3A2F;
+  opacity: 0.55;
+  text-align: center;
+  margin: 0 0 6px;
+}
+ 
+.quiz-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1B3A2F;
+  text-align: center;
+  margin: 0 0 4px;
+  line-height: 1.2;
+}
+ 
+.quiz-sub {
+  font-size: 14px;
+  color: #6b8c7a;
+  text-align: center;
+  margin: 0 0 28px;
+}
+ 
+.dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+ 
+.dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 4px;
+  background: #dde8e3;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+ 
+.dot.active {
+  width: 24px;
+  background: #1B3A2F;
+}
+ 
+.dot.done {
+  background: #1B3A2F;
+  opacity: 0.35;
+}
+ 
+.q-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1B3A2F;
+  text-align: center;
+  margin: 0 0 20px;
+  line-height: 1.4;
+}
+ 
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+ 
+.opt {
+  border: 2px solid #dde8e3;
+  border-radius: 12px;
+  padding: 22px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.18s;
+  background: #ffffff;
+  -webkit-user-select: none;
+  user-select: none;
+}
+ 
+.opt:hover {
+  border-color: #1B3A2F;
+  background: #f0f7f3;
+  transform: translateY(-2px);
+}
+ 
+.opt.chosen {
+  border-color: #1B3A2F;
+  background: #1B3A2F;
+  transform: translateY(-2px);
+}
+ 
+.opt-icon {
+  font-size: 26px;
+  line-height: 1;
+  display: block;
+  margin-bottom: 10px;
+}
+ 
+.opt-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1B3A2F;
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+ 
+.opt.chosen .opt-label {
+  color: #ffffff;
+}
+ 
+.opt-hint {
+  font-size: 12px;
+  color: #7a9a8a;
+  line-height: 1.3;
+}
+ 
+.opt.chosen .opt-hint {
+  color: rgba(255, 255, 255, 0.68);
+}
+ 
+.step {
+  display: block;
+}
+ 
+.step.hidden {
+  display: none;
+}
+ 
+.result {
+  display: none;
+  animation: fadeUp 0.35s ease both;
+}
+ 
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+ 
+.result-top {
+  text-align: center;
+  margin-bottom: 20px;
+}
+ 
+.match-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: #d4e8d8;
+  color: #1B3A2F;
+  border-radius: 20px;
+  padding: 5px 16px;
+  margin-bottom: 14px;
+}
+ 
+.match-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1B3A2F;
+  line-height: 1.15;
+  margin: 0;
+}
+ 
+.match-card {
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+ 
+.match-tagline {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1B3A2F;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+ 
+.match-desc {
+  font-size: 14px;
+  color: #3d5a4a;
+  line-height: 1.65;
+  margin: 0 0 14px;
+}
+ 
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+ 
+.pill {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1B3A2F;
+  background: rgba(27, 58, 47, 0.09);
+  border-radius: 20px;
+  padding: 4px 13px;
+}
+ 
+.cta-btn {
+  display: block;
+  width: 100%;
+  background: #1B3A2F;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 14px 28px;
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 14px;
+  transition: opacity 0.2s;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+}
+ 
+.cta-btn:hover {
+  opacity: 0.86;
+}
+ 
+.retake-btn {
+  display: block;
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #7a9a8a;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+  padding: 0;
+  margin: 0 auto;
+}
+ 
+.retake-btn:hover {
+  color: #1B3A2F;
+}
+ 
+@media (max-width: 380px) {
+  .wrap { padding: 28px 16px 24px; }
+  .options { gap: 8px; }
+  .opt { padding: 16px 10px; }
+  .quiz-title { font-size: 19px; }
+  .match-name { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+ 
+<div class="wrap" id="wrap">
+ 
+  <p class="eyebrow">Quick Match</p>
+  <h2 class="quiz-title">Find Your THC Type</h2>
+  <p class="quiz-sub">Two questions. One recommendation.</p>
+ 
+  <div class="dots">
+    <div class="dot active" id="d1"></div>
+    <div class="dot" id="d2"></div>
+  </div>
+ 
+  <div class="step" id="s1">
+    <p class="q-text">How intense do you want the experience?</p>
+    <div class="options">
+      <div class="opt" onclick="pick(1,'mellow',this)">
+        <span class="opt-icon">🌿</span>
+        <div class="opt-label">Keep it mellow</div>
+        <div class="opt-hint">Light and manageable</div>
+      </div>
+      <div class="opt" onclick="pick(1,'full',this)">
+        <span class="opt-icon">🔥</span>
+        <div class="opt-label">Full strength</div>
+        <div class="opt-hint">The complete experience</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="step hidden" id="s2">
+    <p class="q-text">When are you planning to enjoy it?</p>
+    <div class="options">
+      <div class="opt" onclick="pick(2,'day',this)">
+        <span class="opt-icon">☀️</span>
+        <div class="opt-label">Daytime</div>
+        <div class="opt-hint">Active, social, creative</div>
+      </div>
+      <div class="opt" onclick="pick(2,'evening',this)">
+        <span class="opt-icon">🌙</span>
+        <div class="opt-label">Evening</div>
+        <div class="opt-hint">Wind down, decompress</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="result" id="result">
+    <div class="result-top">
+      <div class="match-badge">Your Match</div>
+      <p class="match-name" id="rName"></p>
+    </div>
+    <div class="match-card" id="rCard">
+      <p class="match-tagline" id="rTagline"></p>
+      <p class="match-desc" id="rDesc"></p>
+      <div class="pills" id="rPills"></div>
+    </div>
+    <a class="cta-btn" id="rCta" href="https://mood.com/shop" target="_blank">Shop at Mood</a>
+    <button class="retake-btn" onclick="reset()">Start over</button>
+  </div>
+ 
+</div>
+ 
+<script>
+var a1 = null;
+ 
+var matches = {
+  'mellow-day': {
+    name: 'Delta-10 THC',
+    tagline: 'Light, uplifting, and made for daytime.',
+    desc: 'Delta-10 sits at around 50 to 60% of Delta-9\'s intensity. It delivers an uplifting, energizing experience — ideal for creative work, social settings, and staying present throughout the day.',
+    pills: ['Uplifting', 'Energizing', '~50-60% intensity'],
+    bg: '#EEE8F5',
+    cta: 'Shop Delta-10 at Mood',
+    url: 'https://mood.com/shop'
+  },
+  'mellow-evening': {
+    name: 'Delta-8 THC',
+    tagline: 'Calm, clear-headed, and easy to manage.',
+    desc: 'Delta-8 delivers about 70% of Delta-9\'s intensity with a cleaner, more manageable feel. It\'s one of the most popular starting points — and a go-to for winding down without feeling overwhelmed.',
+    pills: ['Clear-headed', 'Relaxing', '~70% intensity'],
+    bg: '#F5D5CB',
+    cta: 'Shop Delta-8 at Mood',
+    url: 'https://mood.com/shop'
+  },
+  'full-day': {
+    name: 'Delta-9 THC',
+    tagline: 'The classic. Full strength, any time.',
+    desc: 'Delta-9 is the baseline — 100% intensity. Hemp-derived Delta-9 delivers the full classic cannabis experience, fully legal under the Farm Bill threshold. Start with a small serving and find your sweet spot.',
+    pills: ['Classic experience', 'Full intensity', 'Hemp-derived'],
+    bg: '#D4E8D8',
+    cta: 'Shop Delta-9 at Mood',
+    url: 'https://mood.com/product/15mg-delta-9-thc-gummies'
+  },
+  'full-evening': {
+    name: 'THCa Flower',
+    tagline: 'A rich, full experience for seasoned consumers.',
+    desc: 'THCa\'s effects are significantly amplified when exposed to heat through smoking or vaping. The result is a robust, immersive experience — best suited to consumers who know what they enjoy.',
+    pills: ['Full potency', 'Heat-activated', 'Flower experience'],
+    bg: '#F0E8D4',
+    cta: 'Shop THCa Flower at Mood',
+    url: 'https://mood.com/shop/product-category/flower'
+  }
+};
+ 
+function pick(step, val, el) {
+  var container = document.getElementById('s' + step);
+  var opts = container.getElementsByClassName('opt');
+  for (var i = 0; i < opts.length; i++) {
+    opts[i].classList.remove('chosen');
+  }
+  el.classList.add('chosen');
+ 
+  setTimeout(function() {
+    if (step === 1) {
+      a1 = val;
+      document.getElementById('s1').classList.add('hidden');
+      document.getElementById('s2').classList.remove('hidden');
+      document.getElementById('d1').className = 'dot done';
+      document.getElementById('d2').className = 'dot active';
+    } else {
+      var key = a1 + '-' + val;
+      var r = matches[key];
+ 
+      document.getElementById('s2').classList.add('hidden');
+      document.getElementById('d2').className = 'dot done';
+ 
+      document.getElementById('rName').textContent = r.name;
+      document.getElementById('rTagline').textContent = r.tagline;
+      document.getElementById('rDesc').textContent = r.desc;
+      document.getElementById('rCard').style.background = r.bg;
+ 
+      var pillHtml = '';
+      for (var p = 0; p < r.pills.length; p++) {
+        pillHtml += '<span class="pill">' + r.pills[p] + '</span>';
+      }
+      document.getElementById('rPills').innerHTML = pillHtml;
+ 
+      var cta = document.getElementById('rCta');
+      cta.textContent = r.cta;
+      cta.href = r.url;
+ 
+      document.getElementById('result').style.display = 'block';
+    }
+    resize();
+  }, 260);
+}
+ 
+function reset() {
+  a1 = null;
+  var opts = document.getElementsByClassName('opt');
+  for (var i = 0; i < opts.length; i++) {
+    opts[i].classList.remove('chosen');
+  }
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('s2').classList.add('hidden');
+  document.getElementById('s1').classList.remove('hidden');
+  document.getElementById('d1').className = 'dot active';
+  document.getElementById('d2').className = 'dot';
+  resize();
+}
+ 
+function resize() {
+  setTimeout(function() {
+    var h = document.getElementById('wrap').scrollHeight + 44;
+    window.parent.postMessage({ iframeHeight: h }, '*');
+  }, 60);
+}
+ 
+window.addEventListener('load', resize);
+window.addEventListener('resize', resize);
+</script>
+</body>
+</html>
